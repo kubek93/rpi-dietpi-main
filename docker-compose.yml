@@ -1,0 +1,42 @@
+version: "3.3"
+
+services:
+  mariadb:
+    image: jsurf/rpi-mariadb
+    restart: always
+    volumes:
+      - ../database:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306"
+  adminer:
+    image: adminer
+    restart: always
+    depends_on:
+      - mariadb
+    ports:
+      - "8080:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: mariadb
+  cloud:
+    image: nextcloud
+    restart: always
+    volumes:
+      - ../database/:/var/lib/mysql
+      - ../nextcloud/custom_apps/:/var/www/html/custom_apps
+      - ../nextcloud/config/:/var/www/html/config
+      - ../nextcloud/themes/:/var/www/html/themes
+      - /media/data/:/var/www/html/data
+    depends_on:
+      - mariadb
+    environment:
+      DB_TYPE: mysql
+      DB_HOST: mariadb:3306
+      DB_NAME: nextcloud
+      DB_USER: root
+      DB_PASSWORD: root
+      NEXTCLOUD_ADMIN_USER: admin
+      NEXTCLOUD_ADMIN_PASSWORD: admin
+    ports:
+      - "3001:80"
