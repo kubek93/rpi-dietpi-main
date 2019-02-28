@@ -21,7 +21,7 @@ successLogger.add(winstonRotator, {
   level: "info",
   filename: "./logs/access.log",
   json: false,
-  datePattern: "yyyy-MM-dd-",
+  datePattern: "YYYY-MM-DD",
   prepend: true
 });
 
@@ -31,7 +31,7 @@ errorLogger.add(winstonRotator, {
   level: "error",
   filename: "./logs/error.log",
   json: false,
-  datePattern: "yyyy-MM-dd-",
+  datePattern: "YYYY-MM-DD",
   prepend: true
 });
 
