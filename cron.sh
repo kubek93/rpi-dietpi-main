@@ -1,3 +1,5 @@
 #!/bin/bash
-cd "$(dirname "$0")"
-node ./scripts/update_cloudflare.js
+
+mkdir -p /media/rpi-dietpi-main/scripts/logs
+cd /media/rpi-dietpi-main/scripts
+/usr/local/bin/node update_cloudflare.js
