@@ -1,1 +1,1 @@
-echo "Some console message" 1>&3
+cat /home/dietpi/rpi-dietpi-main/packages.txt | xargs sudo apt-get install -y

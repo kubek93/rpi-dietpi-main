@@ -1,5 +1,5 @@
-/database
-/nextcloud
-/logs
-/node_modules
-.env
+*/database
+*/nextcloud
+*/logs
+*/node_modules
+*.env*
