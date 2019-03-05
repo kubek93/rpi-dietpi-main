@@ -1,3 +1,5 @@
 /database
 /nextcloud
 /logs
+/node_modules
+.env
