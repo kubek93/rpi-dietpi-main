@@ -5,3 +5,5 @@ cp example.env .env && nano .env
 node update_cloudflare.js
 cd ..
 cp cron/* /var/spool/cron/crontabs/
+# if we are in main folder check by pwd
+rm -rf .git .gitignore cron/ # add start.sh and packages.txt
