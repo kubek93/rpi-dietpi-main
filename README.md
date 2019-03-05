@@ -6,7 +6,7 @@ For using our project you should own:
 - public IP address
 - internet connection
 
-# Installation
+## Installation
 
 Follow with instructions:
 
@@ -37,26 +37,35 @@ apt-get install git
 git clone https://github.com/kubek93/rpi-dietpi-main.git /home/dietpi/rpi-dietpi-main && sh /home/dietpi/rpi-dietpi-main/start.sh
 ```
 
-Cron process
-crontab -e
-_/1 _ \* \* \* _ /bin/node /public/test.js
-1 _ \* \* \* /usr/local/bin/node /media/rpi-dietpi-main/scripts/update_cloudflare.js
+## Good to know (not required)
 
-If you want to check where is node write:
-which node
+### Crone process
 
-crontab -e
+Path to cron files:
 
 ```
-* * * * * sh /media/rpi-dietpi-main/cron.sh
+/var/spool/cron/crontabs
 ```
 
-cron.sh
+Cron root file:
+
+```
+* * * * * sh /home/dietpi/rpi-dietpi-main/cron-scripts/cron.sh
+```
+
+Cron scripts for root file:
 
 ```
 #!/bin/bash
 
-mkdir -p /media/rpi-dietpi-main/scripts/logs
-cd /media/rpi-dietpi-main/scripts
+mkdir -p /home/dietpi/rpi-dietpi-main/node-application/logs
+cd /home/dietpi/rpi-dietpi-main/node-application
 /usr/local/bin/node update_cloudflare.js
+
 ```
+
+If you want to view cron process for current user use command: `crontab -e`
+
+### Usefull commands
+
+- `which node` - where node is located

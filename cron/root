@@ -1,0 +1,1 @@
+5 * * * * sh /home/dietpi/rpi-dietpi-main/cron-scripts/every-5.sh
