@@ -1,10 +1,9 @@
 # rpi-dietpi-main
 
-For using our project you should own:
+For using this project you should own:
 
-- raspberry pi
-- public IP address
-- internet connection
+- [x] Network connection with public IP.
+- [x] Raspberry PI connected through by ethernet cable with router.
 
 ## Installation
 
@@ -14,9 +13,9 @@ Follow with instructions:
 
    > DietPi is a extremely lightweight Debian OS. With images starting at 400MB, thats 3x lighter than 'Raspbian Lite'.
 
-2. Flash OS images to SD cards using [balenaEtcher](https://www.balena.io/etcher/).
+2. Flash OS image to SD cards using [balenaEtcher](https://www.balena.io/etcher/).
 
-3. Now you need login to your new system. Firstly generate a new ssh key.
+3. Now you can log in to your new system. Firstly generate a new ssh key.
 
 ```
 ssh-keygen -R hostname
