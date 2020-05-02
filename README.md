@@ -4,7 +4,15 @@ For using this project you should own:
 
 - Network connection with public IP.
 
-## Installation
+## Applications
+
+### Node Applications
+
+- `dns-changer` Application for update dynamic IP address and convert it to correct subdomain in cloudflare platform using external API
+
+## Usage (auto-installation):
+
+## Manual installation:
 
 Follow with instructions:
 
@@ -67,6 +75,8 @@ $ apt-get upgrade
 
 ```
 $ apt-get install -y git
+$ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+$ apt-get install -y nodejs
 ```
 
 5. Install project locally and run bash script.
@@ -78,8 +88,8 @@ $ sh /home/dietpi/rpi-dietpi-main/start.sh
 
 6. Install docker
 ```
-$ curl -fsSL https://get.docker.com -o get-docker.sh
-$ sudo sh get-docker.sh
+$ curl -fsSL https://get.docker.com -o /home/dietpi/get-docker.sh
+$ sh /home/dietpi/get-docker.sh
 ```
 
 ## Good to know (not required)

@@ -1,0 +1,4 @@
+[{
+    "name": "dns-changer",
+    "script": "dns-changer/app.js"
+}]
