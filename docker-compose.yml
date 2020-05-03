@@ -9,7 +9,7 @@ services:
         restart: always
 
     verdaccio:
-        container_name: "verdaccio_relative_path_v4"
+        container_name: verdaccio
         image: verdaccio/verdaccio:4
         ports:
             - "4873:4873"
@@ -17,15 +17,32 @@ services:
         volumes:
             - verdaccio:/verdaccio
 
-    nginx:
-        build:
-            context: ""
-            dockerfile: nginx-reverse-proxy/Dockerfile
+    # nginx:
+    #     container_name: nginx
+    #     build:
+    #         context: ""
+    #         dockerfile: nginx-reverse-proxy/Dockerfile
+    #     ports:
+    #         - "80:80"
+    #     depends_on:
+    #         - verdaccio
+
+    # https://hub.docker.com/r/dperson/samba
+    samba:
+        image: dperson/samba:latest
+        container_name: samba-dperson
+        restart: always
+        volumes:
+            - ./storage/samba/anonymous:/samba/anonymous
+            - ./storage/samba/admin:/samba/admin
+            # - ./samba/smb.conf:/etc/samba/smb.conf
+        environment:
+            USER1: 'kube_k;admin'
+            SHARE1: 'public;/samba/anonymous'
+            SHARE2: 'admin;/samba/admin;yes;no;no;kube_k'
         ports:
-            - "80:80"
-        container_name: "nginx"
-        depends_on:
-            - verdaccio
+            - "139:139"
+            - "445:445"
 
 volumes:
     verdaccio:

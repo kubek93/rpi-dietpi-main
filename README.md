@@ -163,3 +163,29 @@ dietpi-software : Select optimized software for installation.
 htop            : Resource monitor.
 cpu             : Shows CPU information and stats.
  ```
+
+## TODO
+
+- [ ] Change ngnix reverse proxy with traefik
+
+## To install
+- [x] Docker
+- [x] Verdaccio
+- [x] pm2
+- [x] dns-changer
+- [ ] Fix nodemailer
+- [ ] Nginx (nginx-proxy?) configuration and DNS domains cloudflare
+- [ ] HDD configuration
+- [ ] RPI configuration
+- [ ] GitLab
+- [ ] NextCloud (mysql + phpmyadmin or adminer)
+- [ ] Homebridge (homekit)
+- [ ] OpenVPN
+- [ ] Backup system (rclone?)
+- [ ] Splunk + Grafana
+- [ ] Own self-hosted page
+- [ ] luxbot
+- [ ] mail about every attemption to ssh
+- [ ] freeNAS
+- [ ] pihole (DNS checker)
+
