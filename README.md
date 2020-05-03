@@ -123,10 +123,37 @@ If you want to view cron process for current user use command: `crontab -e`
 
 ### Usefull commands
 
+#### Docker
+
+```
+// Run docker-compose with rebuild all containers
+$ docker-compose up --build -d
+$ docker-compose up --build --force-recreate -d
+
+// Show logs
+$ docker-compose logs
+
+// To stop all containers
+$ docker-compose stop
+$ docker container stop $(docker container ls -aq)
+
+// Remove all images with force
+$ docker rmi $(docker images -a -q) -f
+```
+
+#### Verdaccio
+
+```
+$ docker exec -it {ID} /bin/bash
+and
+$ tail -f /var/log/apache2/verdaccio-access.log
+```
+
 #### Linux
 ```
 which node      : where node is located
 ```
+
 #### DietPi
 
 ```

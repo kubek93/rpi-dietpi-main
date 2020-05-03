@@ -1,6 +1,32 @@
-version: "3.8"
+version: "3.3"
 
 services:
     node_applications:
+        container_name: node-applications
         build:
             context: ./node-applications
+            dockerfile: Dockerfile
+        restart: always
+
+    verdaccio:
+        container_name: "verdaccio_relative_path_v4"
+        image: verdaccio/verdaccio:4
+        ports:
+            - "4873:4873"
+        restart: always
+        volumes:
+            - verdaccio:/verdaccio
+
+    nginx:
+        build:
+            context: ""
+            dockerfile: nginx-reverse-proxy/Dockerfile
+        ports:
+            - "80:80"
+        container_name: "nginx"
+        depends_on:
+            - verdaccio
+
+volumes:
+    verdaccio:
+        driver: local

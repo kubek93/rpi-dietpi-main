@@ -20,6 +20,6 @@ ENV DNSCHANGER_CLOUDFLARE_ZONE_ID xxx
 RUN cd dns-changer && npm install --production
 
 # Expose ports needed to use Keymetrics.io
-EXPOSE 80 443 43554
+# EXPOSE 80 443 43554
 
 CMD [ "pm2-runtime", "start", "pm2.json" ]
