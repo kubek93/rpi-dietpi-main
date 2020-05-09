@@ -1,16 +1,11 @@
-# rpi-dietpi-main
+# rpi-home-server
 
-For using this project you should own:
+## Preconditions
 
-- Network connection with public IP.
-
-## Applications
-
-### Node Applications
-
-- `dns-changer` Application for update dynamic IP address and convert it to correct subdomain in cloudflare platform using external API
-
-## Usage (auto-installation):
+For see your raspberry from external network you should have:
+- Static IP for you RPI in router configuration
+- Forward ports to be visible from outside
+- Public IP address - sometimes network providers collect additionall money for this service.
 
 ## Manual installation:
 
@@ -18,174 +13,239 @@ Follow with instructions:
 
 ### 1. Download [DietPi](https://dietpi.com) OS.
 
-> DietPi is a extremely lightweight Debian OS. With images starting at 400MB, thats 3x lighter than 'Raspbian Lite'.
+> DietPi is a extremely lightweight Debian OS. With image 3x lighter than 'Raspbian Lite'.
 
-
-### 2. Format SD card and Flash OS image using [balenaEtcher](https://www.balena.io/etcher/)
+### 2. Format SD card
 
 > The Raspberry Pi's bootloader, built into the GPU and non-updateable, only has support for reading from FAT filesystems (both FAT16 and FAT32), and is unable to boot from an exFAT filesystem.
 
 #### MAC OS:
 ```
-$ diskutil list
-$ diskutil unmountDisk disk2
-$ diskutil eraseDisk FAT32 RPI /dev/disk2
+# diskutil list
+# diskutil unmountDisk disk2
+# diskutil eraseDisk FAT32 RPI /dev/disk2
 ```
 <u>OPTIONAL</u> (if needed):
 ```
-$ diskutil mountDisk /dev/disk2
+# diskutil mountDisk /dev/disk2
 ```
 
-### 3. <u>OPTIONAL</u>: If you want connect rapberry pi using wi-fi
+### 3. Flash OS image using [balenaEtcher](https://www.balena.io/etcher/)
 
-#### Open card fiels using vscode
-```
-$ code /Volumes/boot/dietpi.txt
-```
-and change value for ```AUTO_SETUP_NET_WIFI_ENABLED``` from ```0``` to ```1```
+Choose downloaded dietPi image and select correct disk and click `Flash!`
 
-#### Add settings for connect with you wi-fi network
+### 4. Connect your rapberry pi to the Internet
 
-```
-$ code /Volumes/boot/dietpi-wifi.txt
-```
-these two configs are the most important for you
+#### LAN
+
+Just connect you RPI using ethernet cable.
+
+#### Wi-Fi
+
+From flashed sd card:
+
+- Open file `/boot/dietpi.txt` and provide settings to the network
+
 ```
 aWIFI_SSID[0]='WIFI_NAME'
 aWIFI_KEY[0]='WIFI_PASSWORD'
 ```
 
-### 4. Now you can log in to your new system and configure settings
+- Open file `/boot/dietpi.txt` and change setting `0` with `1` for line
 
-1. Firstly, find an IP address loggin into your router and findind `DietPi` host name
+```
+AUTO_SETUP_NET_WIFI_ENABLED=0
+```
 
-2. Log in into DietPi system
+### 5. Turn on RPI
+
+Put your configured sd card to RPI and connect power supply
+
+### 6. Log in to your configured device and setup required packages
+
+- Check IP number of device finding `DietPi` as a hosts name in your router
+
+- Log in to your RPI
 
 > DietPi has two accounts by default "root" and "dietpi". On first boot, both share the global password "dietpi", respectively the one set in "dietpi.txt".
 
-```
-$ ssh root@ip_address_of_dietpi_machine
-$ apt-get update
-$ apt-get upgrade
-```
-
-3. Finish configuration after first loggin
-
-4. Install git.
+First log in updating whole system and can take few minutes
 
 ```
-$ apt-get install -y git
-$ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-$ apt-get install -y nodejs
+# ssh root@ip_address_of_dietpi_machine
+# apt-get update
+# apt-get upgrade
 ```
 
-5. Install project locally and run bash script.
+Install git
 
 ```
-$ git clone https://github.com/kubek93/rpi-dietpi-main.git /home/dietpi/rpi-dietpi-main
-$ sh /home/dietpi/rpi-dietpi-main/start.sh
+# apt-get install -y git
 ```
 
-6. Install docker
+Install docker
 ```
-$ curl -fsSL https://get.docker.com -o /home/dietpi/get-docker.sh
-$ sh /home/dietpi/get-docker.sh
-```
-
-## Good to know (not required)
-
-### Crone process
-
-Path to cron files:
-
-```
-/var/spool/cron/crontabs
+# curl -fsSL https://get.docker.com -o /home/dietpi/get-docker.sh
+# sh /home/dietpi/get-docker.sh
 ```
 
-Cron root file:
+### 7. Clone this project from github and update all environments variables
+
+Clone project
 
 ```
-* * * * * sh /home/dietpi/rpi-dietpi-main/cron-scripts/cron.sh
+# git clone https://github.com/kubek93/rpi-home-server.git /home/dietpi/rpi-home-server
 ```
-
-Cron scripts for root file:
-
-```
-#!/bin/bash
-
-mkdir -p /home/dietpi/rpi-dietpi-main/node-application/logs
-cd /home/dietpi/rpi-dietpi-main/node-application
-/usr/local/bin/node update_cloudflare.js
+`IMPORTANT:` Fill required variables for cloudflare, samba, etc.
+Update all envs in `docker-compose.yml` file
 
 ```
+// For node application
+DNSCHANGER_CRON_INTERVAL: '* * * * *'
+DNSCHANGER_CLOUDFLARE_USERNAME: 1234
+DNSCHANGER_CLOUDFLARE_KEY: 1234
+DNSCHANGER_CLOUDFLARE_SEARCH_NAME: 1234
+DNSCHANGER_CLOUDFLARE_ZONE_ID: 1234
 
-If you want to view cron process for current user use command: `crontab -e`
-
-### Usefull commands
-
-#### Docker
-
-```
-// Run docker-compose with rebuild all containers
-$ docker-compose up --build -d
-$ docker-compose up --build --force-recreate -d
-
-// Show logs
-$ docker-compose logs
-
-// To stop all containers
-$ docker-compose stop
-$ docker container stop $(docker container ls -aq)
-
-// Remove all images with force
-$ docker rmi $(docker images -a -q) -f
+// For samba
+GLOBAL1: 'access based share enum = yes'
+USER1: 'adminUser;admin'
+SHARE1: 'public;/samba/anonymous'
+SHARE2: 'admin;/samba/admin;yes;no;no;adminUser'
 ```
 
-#### Verdaccio
+### 8. Run project using `docker-compose`
 
 ```
-$ docker exec -it {ID} /bin/bash
-and
-$ tail -f /var/log/apache2/verdaccio-access.log
+# cd /home/dietpi/rpi-home-server & docker-compose up
 ```
 
-#### Linux
+## Tips & Tricks
+
+### External Disks and devices (based on my case)
+
+> The easiest way to do this is the following:
+> Open dietpi_launcher, go to DietPi-Drive_Manager and select the external drive. There you will find the the option "Select to transfer DietPi user data to this drive". When you check this option the folder dietpi_userdata, including Nextcloud data, will be moved to the external disk.
+https://dietpi.com/phpbb/viewtopic.php?t=673
+
+- format pendrive and external disk on mac os using HFS+ type and MRB
+- mount devices
 ```
-which node      : where node is located
+lsblk
+mount /dev/sda2 /mnt/external-sd
+mount /dev/sdb2 /mnt/external-hdd
 ```
 
-#### DietPi
+### Edit hosts file
 
-```
-dietpi-launcher : All the DietPi programs in one place.
-dietpi-config   : Feature rich configuration tool for your device.
-dietpi-software : Select optimized software for installation.
-htop            : Resource monitor.
-cpu             : Shows CPU information and stats.
- ```
+For easier log in to rpi in you local network edit file `/etc/hosts` adding easy to remember name for your rpi ip address
 
 ## TODO
 
+### Configuration
+- [x] Use Docker instead of DietPi configurations
+- [x] Change cron jobs with node-schedule package
+- [ ] Auto-mount external devices (pendrive and hdd disk in my case)
+- [ ] Set up reverse nginx proxy
 - [ ] Change ngnix reverse proxy with traefik
-
-## To install
-- [x] Docker
-- [x] Verdaccio
-- [x] pm2
-- [x] dns-changer
-- [ ] Fix nodemailer
-- [ ] Nginx (nginx-proxy?) configuration and DNS domains cloudflare
+- [ ] Create script for configure device withour manually installations
 - [ ] HDD configuration
-- [ ] RPI configuration
+- [ ] Own self-hosted page with documentation
+
+### Programs
+- [x] dns-changer
+- [x] pm2
+- [x] Verdaccio
+- [ ] Fail2Ban
+- [ ] CertBot
+- [ ] CloudPrint or OctoPrint
+- [ ] Nginx (nginx-proxy?) configuration and DNS domains cloudflare
+- [ ] Fix nodemailer
 - [ ] GitLab
 - [ ] NextCloud (mysql + phpmyadmin or adminer)
 - [ ] Homebridge (homekit)
 - [ ] OpenVPN
 - [ ] Backup system (rclone?)
 - [ ] Splunk + Grafana
-- [ ] Own self-hosted page
 - [ ] luxbot
-- [ ] mail about every attemption to ssh
+- [ ] E-mail about every attemption to ssh
 - [ ] freeNAS
 - [ ] pihole (DNS checker)
+
+## For developers
+
+### Usefull commands
+
+#### Docker
+
+Run docker-compose with rebuild all containers:
+
+```
+# docker-compose up --build -d
+# docker-compose up --build --force-recreate -d
+```
+
+Show logs:
+```
+# docker-compose logs
+```
+
+Stop all containers:
+```
+# docker-compose stop
+# docker container stop $(docker container ls -aq)
+```
+
+Remove all images with force:
+```
+# docker rmi $(docker images -a -q) -f
+```
+
+#### Verdaccio
+
+```
+# docker exec -it {ID} /bin/bash
+and
+# tail -f /var/log/apache2/verdaccio-access.log
+```
+
+#### Linux
+
+##### General
+
+```
+which node      : where node is located
+lsb_release -a  : verfion of linux
+```
+
+##### Disk management
+
+```
+dietpi-drive_manager                : Program for manage disks
+fdisk -l                            : list of mount disks
+df -h                               : list of mount disks
+blkid -o list                       : table of mounted disks
+lsblk                               : show disk with partitions
+umount /mnt/folder_name             : unmount folder from system
+mount /dev/sda2 /mnt/folder_name    : mount external device to folder
+hdparm -W0 /dev/sdg                 : check if disk is in usage
+```
+
+##### DietPi
+
+```
+dietpi-drive_manager    : Program for manage disks
+dietpi-launcher         : All the DietPi programs in one place.
+dietpi-config           : Feature rich configuration tool for your device.
+dietpi-software         : Select optimized software for installation.
+htop                    : Resource monitor.
+cpu                     : Shows CPU information and stats.
+ ```
+
+## Problems appeared
+
+1. Unable to modify any file after run dietPi-Drive_Manager
+
+https://github.com/MichaIng/DietPi/issues/3511
+https://github.com/MichaIng/DietPi/commit/1570e47acac88414ecc8586845f24e70fb38461b
 

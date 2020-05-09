@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const errorLog = require('./helperLogger').errorlog;
 
-const sendEmail = async data => {
+const sendEmail = async (data) => {
     try {
         await nodemailer.createTestAccount();
 
@@ -10,19 +10,19 @@ const sendEmail = async data => {
             port: 587,
             secure: false,
             tls: {
-                rejectUnauthorized: false
+                rejectUnauthorized: false,
             },
             auth: {
                 user: process.env.EMAIL_AUTH_USER,
-                pass: process.env.EMAIL_AUTH_PASS
-            }
+                pass: process.env.EMAIL_AUTH_PASS,
+            },
         });
 
         let mailOptions = {
             from: process.env.EMAIL_FROM,
             to: process.env.EMAIL_TO,
             subject: process.env.EMAIL_SUBJECT,
-            html: data
+            html: data,
         };
 
         return await transporter.sendMail(mailOptions);
@@ -33,5 +33,5 @@ const sendEmail = async data => {
 };
 
 module.exports = {
-    sendEmail
+    sendEmail,
 };
