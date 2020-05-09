@@ -77,16 +77,12 @@ First log in updating whole system and can take few minutes
 # apt-get upgrade
 ```
 
-Install git
-
+Install dependences (git|docker)
 ```
 # apt-get install -y git
-```
-
-Install docker
-```
 # curl -fsSL https://get.docker.com -o /home/dietpi/get-docker.sh
 # sh /home/dietpi/get-docker.sh
+# apt-get install -y docker-compose
 ```
 
 ### 7. Clone this project from github and update all environments variables
@@ -117,7 +113,8 @@ SHARE2: 'admin;/samba/admin;yes;no;no;adminUser'
 ### 8. Run project using `docker-compose`
 
 ```
-# cd /home/dietpi/rpi-home-server & docker-compose up
+# cd /home/dietpi/rpi-home-server
+# docker-compose up --build --force-recreate -d
 ```
 
 ## Tips & Tricks

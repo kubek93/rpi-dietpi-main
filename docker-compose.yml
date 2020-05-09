@@ -38,14 +38,15 @@ services:
         container_name: samba-dperson
         restart: always
         volumes:
-            - ./storage/samba/anonymous:/samba/anonymous
+            - ./storage/samba/guest:/samba/guest
             - ./storage/samba/admin:/samba/admin
-            # - ./samba/smb.conf:/etc/samba/smb.conf
+            - ./samba/smb.conf:/etc/samba/smb.conf
         environment:
-            GLOBAL1: 'access based share enum = yes'
-            USER1: 'adminUser;admin'
-            SHARE1: 'public;/samba/anonymous'
-            SHARE2: 'admin;/samba/admin;yes;no;no;adminUser'
+            USER1: 'adminUser;adminPass'
+            # GLOBAL1: 'access based share enum = yes'
+            # USER1: 'guest;admin2'
+            # SHARE1: 'guest;/samba/anonymous;yes;no;no;'
+            # SHARE2: 'admin;/samba/admin;yes;no;no;adminUser'
         ports:
             - "139:139"
             - "445:445"
