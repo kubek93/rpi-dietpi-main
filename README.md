@@ -57,6 +57,12 @@ aWIFI_KEY[0]='WIFI_PASSWORD'
 AUTO_SETUP_NET_WIFI_ENABLED=0
 ```
 
+- Open file `/boot/config.txt` and change setting `1` with `2` or more for line `(optional)`
+
+```
+change max_usb_current=2
+```
+
 ### 5. Turn on RPI
 
 Put your configured sd card to RPI and connect power supply
@@ -142,7 +148,7 @@ For easier log in to rpi in you local network edit file `/etc/hosts` adding easy
 ### Configuration
 - [x] Use Docker instead of DietPi configurations
 - [x] Change cron jobs with node-schedule package
-- [ ] Auto-mount external devices (pendrive and hdd disk in my case)
+- [x] Auto-mount external devices (pendrive and hdd disk in my case)
 - [ ] Set up reverse nginx proxy
 - [ ] Change ngnix reverse proxy with traefik
 - [ ] Create script for configure device withour manually installations
@@ -237,6 +243,7 @@ dietpi-config           : Feature rich configuration tool for your device.
 dietpi-software         : Select optimized software for installation.
 htop                    : Resource monitor.
 cpu                     : Shows CPU information and stats.
+dmesg                   : System alerts (?)
  ```
 
 ## Problems appeared
@@ -246,3 +253,16 @@ cpu                     : Shows CPU information and stats.
 https://github.com/MichaIng/DietPi/issues/3511
 https://github.com/MichaIng/DietPi/commit/1570e47acac88414ecc8586845f24e70fb38461b
 
+2. HDD disk is moutning as read only
+```
+dmesg | grep sdb
+```
+Shows that `Write Protect is off` we can remove it using `hdparm -r0 /dev/sdb`.
+
+It doesn't help with this situation and problem sill oqqured.
+
+Searching documentation of dietpi I found that users using more than one device from USB should change option for it.
+
+Open file `config.txt` and set up `change max_usb_current=2`
+
+3.

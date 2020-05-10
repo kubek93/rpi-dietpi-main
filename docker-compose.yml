@@ -13,6 +13,7 @@ services:
             DNSCHANGER_CLOUDFLARE_SEARCH_NAME: xxx
             DNSCHANGER_CLOUDFLARE_ZONE_ID: xxx
         restart: always
+
     verdaccio:
         container_name: verdaccio
         image: verdaccio/verdaccio:4
@@ -20,7 +21,26 @@ services:
             - "4873:4873"
         restart: always
         volumes:
-            - verdaccio:/verdaccio
+            - ./storage/verdaccio:/verdaccio
+
+    # https://hub.docker.com/r/dperson/samba
+    samba:
+        image: dperson/samba:latest
+        container_name: samba-dperson
+        restart: always
+        volumes:
+            - ./storage/samba/admin:/samba/admin
+            - ./storage/samba/anonymous:/samba/anonymous
+            - ./samba/smb.conf:/etc/samba/smb.conf
+        environment:
+            USER: 'kube_k;admin'
+            # PERMISSIONS: 'admin'
+            # GLOBAL1: 'access based share enum = yes'
+            # SHARE1: 'guest;/samba/anonymous;yes;no;no;'
+            # SHARE2: 'admin2;/samba/admin;yes;no;no;kube_k'
+        ports:
+            - "139:139"
+            - "445:445"
 
     # nginx:
     #     container_name: nginx
@@ -31,25 +51,6 @@ services:
     #         - "80:80"
     #     depends_on:
     #         - verdaccio
-
-    # https://hub.docker.com/r/dperson/samba
-    samba:
-        image: dperson/samba:latest
-        container_name: samba-dperson
-        restart: always
-        volumes:
-            - ./storage/samba/guest:/samba/guest
-            - ./storage/samba/admin:/samba/admin
-            - ./samba/smb.conf:/etc/samba/smb.conf
-        environment:
-            USER1: 'adminUser;adminPass'
-            # GLOBAL1: 'access based share enum = yes'
-            # USER1: 'guest;admin2'
-            # SHARE1: 'guest;/samba/anonymous;yes;no;no;'
-            # SHARE2: 'admin;/samba/admin;yes;no;no;adminUser'
-        ports:
-            - "139:139"
-            - "445:445"
 
 volumes:
     verdaccio:
