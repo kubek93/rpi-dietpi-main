@@ -110,6 +110,7 @@ DNSCHANGER_CLOUDFLARE_SEARCH_NAME: 1234
 DNSCHANGER_CLOUDFLARE_ZONE_ID: 1234
 
 // For samba
+// unsupported now
 GLOBAL1: 'access based share enum = yes'
 USER1: 'adminUser;admin'
 SHARE1: 'public;/samba/anonymous'
@@ -159,6 +160,7 @@ For easier log in to rpi in you local network edit file `/etc/hosts` adding easy
 - [x] dns-changer
 - [x] pm2
 - [x] Verdaccio
+- [ ] Portainer
 - [ ] Fail2Ban
 - [ ] CertBot
 - [ ] CloudPrint or OctoPrint
@@ -265,4 +267,9 @@ Searching documentation of dietpi I found that users using more than one device 
 
 Open file `config.txt` and set up `change max_usb_current=2`
 
-3.
+3. Unable to run Verdaccio
+
+```
+root@DietPi:/home/dietpi/rpi-home-server# docker logs verdaccio
+standard_init_linux.go:211: exec user process caused "exec format error"
+```
