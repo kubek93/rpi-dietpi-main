@@ -160,6 +160,7 @@ For easier log in to rpi in you local network edit file `/etc/hosts` adding easy
 - [x] dns-changer
 - [x] pm2
 - [x] Verdaccio
+- [ ] pihole - https://filterlists.com/
 - [ ] Portainer
 - [ ] Fail2Ban
 - [ ] CertBot
