@@ -8,20 +8,23 @@ services:
             dockerfile: Dockerfile
         environment:
             DNSCHANGER_CRON_INTERVAL: '* * * * *'
-            DNSCHANGER_CLOUDFLARE_USERNAME: xxx
-            DNSCHANGER_CLOUDFLARE_KEY: xxx
-            DNSCHANGER_CLOUDFLARE_SEARCH_NAME: xxx
-            DNSCHANGER_CLOUDFLARE_ZONE_ID: xxx
+            DNSCHANGER_CLOUDFLARE_USERNAME: jakub.michnowicz@gmail.com
+            DNSCHANGER_CLOUDFLARE_KEY: 758fc6d6a57026a4ce169bcfb871e22ea1c5f
+            DNSCHANGER_CLOUDFLARE_SEARCH_NAME: rpi
+            DNSCHANGER_CLOUDFLARE_ZONE_ID: 48bc586418b8cddf06fde1587ec058cc
         restart: always
 
     verdaccio:
         container_name: verdaccio
-        image: verdaccio/verdaccio:4
+        image: verdaccio/verdaccio:latest
         ports:
             - "4873:4873"
         restart: always
         volumes:
-            - ./storage/verdaccio:/verdaccio
+            - ./storage/verdaccio:/verdaccio/storage
+            - ./verdaccio/config:/root/.config/verdaccio
+            - ./verdaccio/plugins:/verdaccio/plugins
+            - ./verdaccio/logs:/verdaccio/logs
 
     # https://hub.docker.com/r/dperson/samba
     samba:
